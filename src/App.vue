@@ -19,20 +19,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-
+import { defineComponent, reactive, ref, toRefs } from 'vue';
+interface DataProps {
+  girls: string[];
+  selectedGirl: string;
+  selectGirlFun: (index: number) => void;
+}
 export default defineComponent({
   name: 'App',
   setup() {
-    const girls = ref(['不知火舞', '王昭君', '蔡文姬'])
-    const selectedGirl = ref('')
-    const selectGirlFun = (index: number) => {
-      selectedGirl.value = girls.value[index]
-    }
+    const data: DataProps = reactive({
+      girls: ref(['不知火舞', '王昭君', '蔡文姬']),
+      selectedGirl: ref(''),
+      selectGirlFun: (index: number) => {
+        data.selectedGirl = data.girls[index]
+      } 
+    })
+    const refData = toRefs(data)
     return {
-      girls,
-      selectedGirl,
-      selectGirlFun
+      ...refData
     }
   }
 });
