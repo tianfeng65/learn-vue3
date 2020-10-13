@@ -3,62 +3,34 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <div>
       <h2>欢迎光临红浪漫洗浴中心</h2>
-      <div>请选择一位美女为你服务</div>
+      <div>随机出现一张狗狗的照片</div>
+      <div v-if="res.loading">Loading...</div>
+      <img v-if="res.loaded" :src="res.result.message" @click="getDog"/>
     </div>
-    <div>{{nowTime}}</div>
-    <div><button @click="getNowTime">显示时间</button></div>
-    <div>
-      <button 
-        v-for="(item, index) of girls" 
-        :key="index"
-        @click="selectGirlFun(index)"
-      >
-        {{index}}:{{item}}
-      </button>
-    </div>
-    <div>你选择了【{{selectedGirl}}】为你服务！</div>
   </div>
 </template>
 
 <script lang="ts">
 import { 
-  defineComponent,
-  reactive, 
   ref, 
-  toRefs,
-  onBeforeMount,
-  onMounted,
-  onBeforeUpdate,
-  onUpdated,
-  onRenderTracked,
-  onRenderTriggered
+  onMounted
 } from 'vue';
-import{nowTime, getNowTime} from './hooks/useNowTime'
-
-interface DataProps {
-  girls: string[];
-  selectedGirl: string;
-  selectGirlFun: (index: number) => void;
-}
-export default defineComponent({
+import useAxios from './hooks/useAxios'
+const app = {
   name: 'App',
   setup() {
-    const data: DataProps = reactive({
-      girls: ref(['不知火舞', '王昭君', '蔡文姬']),
-      selectedGirl: ref(''),
-      selectGirlFun: (index: number) => {
-        data.selectedGirl = data.girls[index]
-      } 
-    })
-    
-    const refData = toRefs(data)
+    const res = ref({})
+    const getDog = () => {
+      res.value = useAxios('https://dog.ceo/api/breeds/image/random')
+    }
+    onMounted(() => setInterval(getDog, 3000))
     return {
-      ...refData,
-      nowTime,
-      getNowTime
+      res,
+      getDog
     }
   }
-});
+}
+export default app
 </script>
 
 <style>
