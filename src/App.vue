@@ -27,7 +27,9 @@ import {
   onBeforeMount,
   onMounted,
   onBeforeUpdate,
-  onUpdated
+  onUpdated,
+  onRenderTracked,
+  onRenderTriggered
 } from 'vue';
 interface DataProps {
   girls: string[];
@@ -37,7 +39,6 @@ interface DataProps {
 export default defineComponent({
   name: 'App',
   setup() {
-    console.log('1-开始创建组件--setup()')
     const data: DataProps = reactive({
       girls: ref(['不知火舞', '王昭君', '蔡文姬']),
       selectedGirl: ref(''),
@@ -45,17 +46,13 @@ export default defineComponent({
         data.selectedGirl = data.girls[index]
       } 
     })
-    onBeforeMount(() => {
-      console.log('2-组件挂载到页面之前执行--onBeforeMount()')
+    onRenderTracked((event) => {
+      console.log('状态跟踪钩子函数执行--onRenderTracked()')
+      console.log(event)
     })
-    onMounted(() => {
-      console.log('3-组件挂载到页面之后执行--onMounted()')
-    })
-    onBeforeUpdate(() => {
-      console.log('4-组件即将更新之前执行--onBeforeUpdate()')
-    })
-    onUpdated(() => {
-      console.log('5-组件更新之后执行--onUpdate()')
+    onRenderTriggered((event) => {
+      console.log('状态触发钩子函数执行--onRenderTriggered()')
+      console.log(event)
     })
     const refData = toRefs(data)
     return {
