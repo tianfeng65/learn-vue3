@@ -5,6 +5,8 @@
       <h2>欢迎光临红浪漫洗浴中心</h2>
       <div>请选择一位美女为你服务</div>
     </div>
+    <div>{{nowTime}}</div>
+    <div><button @click="getNowTime">显示时间</button></div>
     <div>
       <button 
         v-for="(item, index) of girls" 
@@ -31,6 +33,8 @@ import {
   onRenderTracked,
   onRenderTriggered
 } from 'vue';
+import{nowTime, getNowTime} from './hooks/useNowTime'
+
 interface DataProps {
   girls: string[];
   selectedGirl: string;
@@ -46,17 +50,12 @@ export default defineComponent({
         data.selectedGirl = data.girls[index]
       } 
     })
-    onRenderTracked((event) => {
-      console.log('状态跟踪钩子函数执行--onRenderTracked()')
-      console.log(event)
-    })
-    onRenderTriggered((event) => {
-      console.log('状态触发钩子函数执行--onRenderTriggered()')
-      console.log(event)
-    })
+    
     const refData = toRefs(data)
     return {
-      ...refData
+      ...refData,
+      nowTime,
+      getNowTime
     }
   }
 });
