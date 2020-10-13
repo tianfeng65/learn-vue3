@@ -19,7 +19,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs } from 'vue';
+import { 
+  defineComponent,
+  reactive, 
+  ref, 
+  toRefs,
+  onBeforeMount,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated
+} from 'vue';
 interface DataProps {
   girls: string[];
   selectedGirl: string;
@@ -28,12 +37,25 @@ interface DataProps {
 export default defineComponent({
   name: 'App',
   setup() {
+    console.log('1-开始创建组件--setup()')
     const data: DataProps = reactive({
       girls: ref(['不知火舞', '王昭君', '蔡文姬']),
       selectedGirl: ref(''),
       selectGirlFun: (index: number) => {
         data.selectedGirl = data.girls[index]
       } 
+    })
+    onBeforeMount(() => {
+      console.log('2-组件挂载到页面之前执行--onBeforeMount()')
+    })
+    onMounted(() => {
+      console.log('3-组件挂载到页面之后执行--onMounted()')
+    })
+    onBeforeUpdate(() => {
+      console.log('4-组件即将更新之前执行--onBeforeUpdate()')
+    })
+    onUpdated(() => {
+      console.log('5-组件更新之后执行--onUpdate()')
     })
     const refData = toRefs(data)
     return {
